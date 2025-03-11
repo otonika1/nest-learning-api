@@ -5,6 +5,9 @@ import { UpdatePropertyFeatureDto } from 'src/property-feature/dto/updatePropert
 import { UpdateUserDto } from './dto/UpdateUser.dto';
 import { CreateUserDto } from './dto/CreateUser.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
+import { Roles } from 'src/auth/decorators/roles.decoratos';
+import { Role } from 'src/auth/enums/roles.enum';
+import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
 
 @Controller('user')
 export class UserController {
@@ -18,10 +21,12 @@ export class UserController {
         findOne(@Param('id', ParseIntPipe) id){
             return this.userService.getById(id);
         } */
+        @Roles(Role.ADMIN)
+        @UseGuards(RolesGuard)
         @UseGuards(JwtAuthGuard)
-        @Get('profile')
-        getProfile(@Req() req){
-            return this.userService.getById(req.params.id);
+        @Get('profile/:id')
+        getProfile(@Param('id', ParseIntPipe) id){
+            return this.userService.getById(id);
         }
         @Post('create')
         @UsePipes(new ValidationPipe)

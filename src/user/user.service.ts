@@ -33,7 +33,8 @@ export class UserService {
         async getById(id: number) {
             return this.userRepo.findOne({
                 where: { id },
-                select: ["firstName", "lastName", "email", "identificationCode"], // Specify the fields you want
+                relations: ['properties'],
+                //select: ["firstName", "lastName", "email", "identificationCode"], // Specify the fields you want
             });
         }
         
